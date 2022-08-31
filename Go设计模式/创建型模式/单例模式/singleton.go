@@ -8,7 +8,7 @@ type Singleton struct {
 var singleton *Singleton
 var once sync.Once
 
-func GetSingleton() *Singleton {
+func GetInstance() *Singleton {
 	once.Do(func() {
 		singleton = &Singleton{}
 	})
