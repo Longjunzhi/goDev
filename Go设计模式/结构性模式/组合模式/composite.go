@@ -40,14 +40,14 @@ func (c *component) Parent() Component {
 }
 
 func (c *component) SetParent(parent Component) {
-	c.SetParent(parent)
+	c.parent = parent
 
 }
 func (c *component) Name() string {
 	return c.name
 }
 
-func (c *component) setName(name string) {
+func (c *component) SetName(name string) {
 	c.name = name
 }
 
