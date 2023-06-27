@@ -4,6 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 	"io"
 	"os"
 	"path"
@@ -11,9 +13,17 @@ import (
 )
 
 func main() {
-	//path := "D:\\个人\\手机图片处理\\全部照片"
 	pathName := "D:\\个人\\images"
 	descPath := "D:\\img\\"
+	db, err := gorm.Open(sqlite.Open(descPath+"\\"+"test.db"), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+	err = db.AutoMigrate(&Img{})
+	if err != nil {
+		return
+	}
+	//path := "D:\\个人\\手机图片处理\\全部照片"
 	fileNames, err := getFilesAndDirs(pathName)
 	if err != nil {
 		return
@@ -106,4 +116,12 @@ func copyFile(sourceFileName string, descFileName string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+type Img struct {
+	gorm.Model
+	Md5File   string
+	PhotoTime uint
+	Path      string
+	FileName  string
 }
