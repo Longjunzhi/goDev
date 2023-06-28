@@ -4,8 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	//"gorm.io/driver/sqlite"
+	//"gorm.io/gorm"
 	"io"
 	"os"
 	"path"
@@ -13,16 +13,20 @@ import (
 )
 
 func main() {
-	pathName := "D:\\个人\\images"
-	descPath := "D:\\img\\"
-	db, err := gorm.Open(sqlite.Open(descPath+"\\"+"test.db"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-	err = db.AutoMigrate(&Img{})
-	if err != nil {
-		return
-	}
+	defer func() {
+		err := recover()
+		fmt.Printf("错误：%+v", err)
+	}()
+	pathName := "D:\\个人\\所有照片\\"
+	descPath := "D:\\个人\\data\\"
+	//db, err := gorm.Open(sqlite.Open(descPath+"test.db"), &gorm.Config{})
+	//if err != nil {
+	//	panic("failed to connect database")
+	//}
+	//err = db.AutoMigrate(&fileImage{})
+	//if err != nil {
+	//	return
+	//}
 	//path := "D:\\个人\\手机图片处理\\全部照片"
 	fileNames, err := getFilesAndDirs(pathName)
 	if err != nil {
@@ -34,31 +38,27 @@ func main() {
 	fmt.Printf("done")
 }
 
-func moveFile(s string, descDir string) {
-	fileMd5, err := getFileMd5(s)
-	fmt.Printf("%v %v \n", s, descDir+fileMd5+path.Ext(s))
-	if err != nil {
-		return
-	}
-	_, err = copyFile(s, descDir+fileMd5+path.Ext(s))
+func moveFile(fileImage fileImage, descDir string) {
+	//panic(descDir + fileImage.ModTime + fileImage.Md5File + path.Ext(fileImage.FileName))
+	_, err := copyFile(fileImage.FileName, descDir+fileImage.ModTime+path.Ext(fileImage.FileName))
 	if err != nil {
 		return
 	}
 }
 
-func getFilesAndDirs(dirPath string) (files []string, err error) {
+func getFilesAndDirs(dirPath string) (files []fileImage, err error) {
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {
 		return nil, err
 	}
-	infos := make([]string, 0, len(entries))
+	fileImages := make([]fileImage, 0, len(entries))
 	for _, entry := range entries {
 		info, err := entry.Info()
-		fmt.Printf("%+v", info.Mode())
+		//panic(info.ModTime().Format("2006-1-02 15:04:05"))
 		if entry.IsDir() {
 			childDir := dirPath + "\\" + info.Name()
 			tempInfo, _ := getFilesAndDirs(childDir)
-			infos = append(infos, tempInfo...)
+			fileImages = append(fileImages, tempInfo...)
 		}
 		if err != nil {
 			return nil, err
@@ -66,10 +66,19 @@ func getFilesAndDirs(dirPath string) (files []string, err error) {
 		fileName := dirPath + "\\" + info.Name()
 		suffixes := []string{".png", ".PNG", "JPG", "jpg"}
 		if hasSuffixes(fileName, suffixes) {
-			infos = append(infos, fileName)
+			//md5FileString, _ := getFileMd5(fileName)
+			//modTime := info.ModTime().Format("2006102150405")
+			modTime := info.ModTime().Format("2006-1-02-15-04-05")
+			tempImage := fileImage{
+				//Md5File:  md5FileString,
+				ModTime:  modTime,
+				Path:     dirPath,
+				FileName: fileName,
+			}
+			fileImages = append(fileImages, tempImage)
 		}
 	}
-	return infos, nil
+	return fileImages, nil
 }
 
 func hasSuffixes(s string, suffixes []string) bool {
@@ -118,10 +127,10 @@ func copyFile(sourceFileName string, descFileName string) (bool, error) {
 	return true, nil
 }
 
-type Img struct {
-	gorm.Model
-	Md5File   string
-	PhotoTime uint
-	Path      string
-	FileName  string
+type fileImage struct {
+	//gorm.Model
+	Md5File  string
+	ModTime  string
+	Path     string
+	FileName string
 }
