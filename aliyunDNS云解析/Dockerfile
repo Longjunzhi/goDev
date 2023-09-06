@@ -5,7 +5,7 @@ ENV GO111MODULE=on \
     GOPROXY=https://goproxy.cn,direct \
     ENV=prod
 
-WORKDIR $GOPATH/src/aliyunDns
-COPY . $GOPATH/src/aliyunDns
+WORKDIR $GOPATH/src/aliyundns
+COPY . $GOPATH/src/aliyundns
 RUN go build .
-ENTRYPOINT ["./aliyunDns"]
+ENTRYPOINT ["./aliyundns"]
