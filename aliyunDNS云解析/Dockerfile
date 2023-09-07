@@ -8,4 +8,4 @@ ENV GO111MODULE=on \
 WORKDIR $GOPATH/src/aliyundns
 COPY . $GOPATH/src/aliyundns
 RUN go build .
-ENTRYPOINT ["./aliyundns"]
+ENTRYPOINT ["./dns"]
