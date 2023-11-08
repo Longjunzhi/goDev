@@ -1,2 +1,4 @@
-accesskeyId: "123"
-accessKeySecret: "123"
+AccessKey:
+  accesskeyId: "123"
+  accessKeySecret: "123"
+hosts: ["my.test.cn"]

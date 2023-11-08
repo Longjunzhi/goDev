@@ -24,20 +24,33 @@ type AccessKey struct {
 	AccessKeySecret string `json:"access_key_secret"`
 }
 
-var MyAccessKey AccessKey
+type AliyunCloudResolution struct {
+	AccessKey AccessKey `json:"access_key"`
+	Hosts     []string  `json:"hosts"`
+}
+
+var MyAliyunCloudResolution AliyunCloudResolution
 
 func main() {
 	GetConfig()
 	ip2409IPv6s := get2409IPv6s()
 	if len(ip2409IPv6s) == 0 {
-		fmt.Println("没有获取到2409开头的IPv6地址")
+		_ = fmt.Errorf("没有获取到移动2409开头的IPv6地址")
 		return
 	}
 	fmt.Printf("IPv6地址2409开头: %v", ip2409IPv6s)
-	err := UpdateIp("blog", "AAAA", ip2409IPv6s, "blog.pangxuejun.cn")
-	if err != nil {
+	hosts := MyAliyunCloudResolution.Hosts
+	if hosts == nil || len(hosts) == 0 {
+		_ = fmt.Errorf("没有配置域名")
 		return
 	}
+	for _, host := range hosts {
+		err := UpdateIp(host[:strings.Index(host, ".")], "AAAA", ip2409IPv6s, host)
+		if err != nil {
+			continue
+		}
+	}
+
 }
 
 func get2409IPv6s() (ips []string) {
@@ -64,8 +77,8 @@ func UpdateIp(RR string, Type string, ips []string, subDomain string) (_err erro
 	// 请确保代码运行环境设置了环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID 和 ALIBABA_CLOUD_ACCESS_KEY_SECRET。
 	// 工程代码泄露可能会导致 AccessKey 泄露，并威胁账号下所有资源的安全性。以下代码示例使用环境变量获取 AccessKey 的方式进行调用，仅供参考，建议使用更安全的 STS 方式，更多鉴权访问方式请参见：https://help.aliyun.com/document_detail/378661.html
 
-	myAccessKey := MyAccessKey.AccessKeyId
-	myAccessKeySecret := MyAccessKey.AccessKeySecret
+	myAccessKey := MyAliyunCloudResolution.AccessKey.AccessKeyId
+	myAccessKeySecret := MyAliyunCloudResolution.AccessKey.AccessKeySecret
 
 	client, _err := CreateClient(tea.String(myAccessKey), tea.String(myAccessKeySecret))
 	if _err != nil {
@@ -84,7 +97,7 @@ func UpdateIp(RR string, Type string, ips []string, subDomain string) (_err erro
 	record := options.Body.DomainRecords.Record[0]
 	recordId := record.RecordId
 	value := record.Value
-	fmt.Printf("获取域名recordId:%v，value: %v", *recordId, *value)
+	//fmt.Printf("获取域名recordId:%v，value: %v", *recordId, *value)
 	for _, v := range ips {
 		if v == *value {
 			fmt.Printf("域名解析检测到相同 v:%v，value: %v", v, *value)
@@ -138,7 +151,7 @@ func GetConfig() (accessKeyId string, accessKeySecret string) {
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("Error reading config, %s", err))
 	}
-	err = viper.Unmarshal(&MyAccessKey)
+	err = viper.Unmarshal(&MyAliyunCloudResolution)
 	if err != nil {
 		panic(fmt.Errorf("unable to decode into appConf, %v", err))
 	}
