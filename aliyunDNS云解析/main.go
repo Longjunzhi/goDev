@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"net"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -141,12 +142,12 @@ func CreateClient(accessKeyId *string, accessKeySecret *string) (_result *alidns
 }
 
 func GetConfig() (accessKeyId string, accessKeySecret string) {
-	path, err := os.Getwd()
+	path, err := os.Executable()
 	if err != nil {
 		panic(err)
 	}
 	viper.SetConfigName("config")
-	viper.AddConfigPath(path)
+	viper.AddConfigPath(filepath.Dir(path))
 	viper.SetConfigType("yml")
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("Error reading config, %s", err))
