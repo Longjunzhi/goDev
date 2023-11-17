@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "Img/config"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
@@ -15,10 +16,13 @@ import (
 func main() {
 	defer func() {
 		err := recover()
-		fmt.Printf("错误：%+v", err)
+		if err != nil {
+			fmt.Printf("系统捕获错误：%+v", err)
+		}
+		fmt.Printf("结束")
 	}()
-	pathName := "D:\\个人\\所有照片\\"
-	descPath := "D:\\个人\\data\\"
+	//pathName := "D:\\个人\\所有照片\\"
+	//descPath := "D:\\个人\\data\\"
 	//db, err := gorm.Open(sqlite.Open(descPath+"test.db"), &gorm.Config{})
 	//if err != nil {
 	//	panic("failed to connect database")
@@ -28,14 +32,14 @@ func main() {
 	//	return
 	//}
 	//path := "D:\\个人\\手机图片处理\\全部照片"
-	fileNames, err := getFilesAndDirs(pathName)
-	if err != nil {
-		return
-	}
-	for _, fileName := range fileNames {
-		moveFile(fileName, descPath)
-	}
-	fmt.Printf("done")
+	//fileNames, err := getFilesAndDirs(pathName)
+	//if err != nil {
+	//	return
+	//}
+	//for _, fileName := range fileNames {
+	//	moveFile(fileName, descPath)
+	//}
+	//fmt.Printf("done")
 }
 
 func moveFile(fileImage fileImage, descDir string) {
