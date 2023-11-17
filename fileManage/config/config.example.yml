@@ -1,0 +1,17 @@
+storageConf:
+  path: "/home/pang/storage"
+  accessSecret: "123456"
+
+serverConf:
+  name: "my_images"
+  version: "0.0.1"
+  host: "0.0.0.0"
+  port: 8080
+mysqlConf:
+  user: "root"
+  password: "123456"
+  host: "1.1.1.1"
+  port: 3306
+  db: "my_images"
+
+env: dev
