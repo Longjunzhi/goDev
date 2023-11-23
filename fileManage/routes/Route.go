@@ -12,4 +12,6 @@ var (
 func init() {
 	Routes = gin.Default()
 	Routes.POST("/api/login", controller.Login)
+	Routes.POST("/api/upload", controller.Upload)
+	Routes.POST("/api/upload/multiple", controller.UploadMultiple)
 }

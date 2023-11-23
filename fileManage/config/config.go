@@ -22,7 +22,7 @@ type ServerConfig struct {
 	Port int    `json:"port"`
 }
 
-type storageConfig struct {
+type StorageConfig struct {
 	Path         string `json:"path"`
 	AccessSecret string `json:"access_secret"`
 }
@@ -32,7 +32,7 @@ type AppConfiguration struct {
 	BasePath    string
 	ServerConf  ServerConfig
 	MysqlConf   MysqlConfig
-	storageConf storageConfig
+	StorageConf StorageConfig
 }
 
 var AppConf AppConfiguration
