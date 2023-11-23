@@ -1,10 +1,21 @@
 package main
 
 import (
+	"Img/config"
 	_ "Img/config"
+	"Img/routes"
+	"context"
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
+	"log"
+	"net/http"
+	"os/signal"
+	"syscall"
+	"time"
+
 	//"gorm.io/driver/sqlite"
 	//"gorm.io/gorm"
 	"io"
@@ -21,6 +32,8 @@ func main() {
 		}
 		fmt.Printf("结束")
 	}()
+	runServer()
+
 	//pathName := "D:\\个人\\所有照片\\"
 	//descPath := "D:\\个人\\data\\"
 	//db, err := gorm.Open(sqlite.Open(descPath+"test.db"), &gorm.Config{})
@@ -40,6 +53,40 @@ func main() {
 	//	moveFile(fileName, descPath)
 	//}
 	//fmt.Printf("done")
+}
+
+func runServer() {
+	router := routes.Routes
+	host := config.AppConf.ServerConf.Host
+	port := config.AppConf.ServerConf.Port
+	logrus.Infof("server run at: host = %+v, port = %+v", host, port)
+	address := fmt.Sprintf("%s:%d", host, port)
+	server := &http.Server{
+		Addr:           address,
+		Handler:        router,
+		ReadTimeout:    61 * time.Second,
+		WriteTimeout:   61 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+	logrus.Infof("runing server at : %v", address)
+	go func() {
+		err := server.ListenAndServe()
+		if err != nil && errors.Is(err, http.ErrServerClosed) {
+			logrus.Errorf("Server Listen Error: %s\n ", err)
+		}
+	}()
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutting down server...")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatal("Server forced to shutdown:", err)
+	}
+	log.Println("Server exiting")
+
 }
 
 func moveFile(fileImage fileImage, descDir string) {

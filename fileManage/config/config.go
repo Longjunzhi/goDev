@@ -38,8 +38,10 @@ type AppConfiguration struct {
 var AppConf AppConfiguration
 
 func init() {
+	env := os.Getenv("ENV")
+	AppConf.ENV = env
 	setBasePath()
-	viper.SetConfigName("config")
+	viper.SetConfigName("config." + AppConf.ENV)
 	viper.AddConfigPath(AppConf.BasePath + util.GetPathTag() + "config")
 	viper.SetConfigType("yml")
 	if err := viper.ReadInConfig(); err != nil {
@@ -49,21 +51,20 @@ func init() {
 	if err != nil {
 		panic(fmt.Errorf("unable to decode into appConf, %v", err))
 	}
-	logrus.Infof("AppConf = %+v", AppConf)
-	logrus.Infof("init success: env = %v, conf = %+v", AppConf.ENV, AppConf)
+	logrus.Infof("init success: conf = %+v", AppConf)
 }
 
 func setBasePath() {
-	env := os.Getenv("ENV")
 	basePath := ""
-	if env == "prod" {
+	if AppConf.ENV == "prod" {
 		path, err := os.Executable()
 		if err != nil {
 			panic(err)
 		}
 		basePath = path
 		basePath = filepath.Dir(basePath)
-	} else {
+	}
+	if AppConf.ENV == "dev" {
 		path, err := os.Getwd()
 		if err != nil {
 			panic(err)
