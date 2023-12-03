@@ -2,6 +2,8 @@ package controller
 
 import (
 	"Img/config"
+	"Img/databases"
+	"Img/model"
 	"Img/util"
 	"crypto/md5"
 	"encoding/hex"
@@ -23,6 +25,13 @@ func Upload(c *gin.Context) {
 	hash := md5.New()
 	_, _ = io.Copy(hash, open)
 	md5String := hex.EncodeToString(hash.Sum(nil))
+	media := model.NewMedia()
+	media.Md5 = md5String
+	err = databases.CreateMedia(media)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
 	err = c.SaveUploadedFile(file, config.AppConf.BasePath+util.GetPathTag()+file.Filename)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())

@@ -1,9 +1,19 @@
 package model
 
+const MediaTableName = "media"
+
 type Media struct {
 	Name string `json:"name"`
-	Size string `json:"size"`
+	Size int64  `json:"size"`
 	Md5  string `json:"md_5"`
 	Type string `json:"type"`
 	Model
+}
+
+func NewMedia() (media *Media) {
+	return &Media{}
+}
+
+func (m *Media) TableName() string {
+	return MediaTableName
 }

@@ -1,7 +1,9 @@
 package config
 
 import (
+	"Img/databases"
 	"Img/util"
+	"errors"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -52,6 +54,19 @@ func init() {
 		panic(fmt.Errorf("unable to decode into appConf, %v", err))
 	}
 	logrus.Infof("init success: conf = %+v", AppConf)
+
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
+		AppConf.MysqlConf.User,
+		AppConf.MysqlConf.Password,
+		AppConf.MysqlConf.Host,
+		AppConf.MysqlConf.Port,
+		AppConf.MysqlConf.DB)
+	err = databases.InitDatabase(dsn)
+
+	if err != nil {
+		logrus.Errorf("init mysql config: %v, err: %v", AppConf.MysqlConf, err)
+		panic(errors.New("init mysql config fail"))
+	}
 }
 
 func setBasePath() {
