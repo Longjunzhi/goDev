@@ -3,6 +3,7 @@ package databases
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"strings"
 )
 
 var (
@@ -15,4 +16,11 @@ func InitDatabase(dsn string) (err error) {
 		return err
 	}
 	return nil
+}
+
+func IsErrorRecordNotFound(err error) bool {
+	if err != nil && strings.Contains(err.Error(), "record not found") {
+		return true
+	}
+	return false
 }

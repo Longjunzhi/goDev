@@ -7,6 +7,7 @@ type Media struct {
 	Size int64  `json:"size"`
 	Md5  string `json:"md_5"`
 	Type string `json:"type"`
+	Path string `json:"path"`
 	Model
 }
 
