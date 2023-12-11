@@ -71,7 +71,7 @@ func init() {
 
 func setBasePath() {
 	basePath := ""
-	if AppConf.ENV == "prod" {
+	if AppConf.ENV != "dev" {
 		path, err := os.Executable()
 		if err != nil {
 			panic(err)
