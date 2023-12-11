@@ -9,13 +9,13 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"log"
 	"net/http"
 	"os/signal"
 	"syscall"
 	"time"
-
 	//"gorm.io/driver/sqlite"
 	//"gorm.io/gorm"
 	"io"
@@ -32,6 +32,10 @@ func main() {
 		}
 		fmt.Printf("结束")
 	}()
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Some error occured. Err: %s", err)
+	}
 	runServer()
 
 	//pathName := "D:\\个人\\所有照片\\"
