@@ -2,3 +2,4 @@ config/config.dev.yml
 config/config.prod.yml
 *.exe
 .env
+storge

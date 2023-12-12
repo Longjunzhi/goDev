@@ -5,7 +5,6 @@ import (
 	"Img/databases"
 	"Img/model"
 	"Img/services"
-	"Img/util"
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
@@ -47,7 +46,7 @@ func Upload(c *gin.Context) {
 	}
 
 	media.Name = fileName
-	path := config.AppConf.BasePath + util.GetPathTag() + fileName
+	path := config.AppConf.StorageConf.Path + fileName
 	media.Path = path
 	err = c.SaveUploadedFile(file, path)
 	if err != nil {
@@ -85,7 +84,7 @@ func UploadMultiple(c *gin.Context) {
 		}
 
 		fileName := file.Filename
-		path := config.AppConf.BasePath + util.GetPathTag() + fileName
+		path := config.AppConf.StorageConf.Path + fileName
 		md5String := hex.EncodeToString(hash.Sum(nil))
 		media := model.NewMedia()
 		media.Md5 = md5String

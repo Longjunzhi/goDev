@@ -26,6 +26,7 @@ type ServerConfig struct {
 
 type StorageConfig struct {
 	Path         string `json:"path"`
+	Dir          string `json:"dir"`
 	AccessSecret string `json:"access_secret"`
 }
 
@@ -53,6 +54,7 @@ func init() {
 	if err != nil {
 		panic(fmt.Errorf("unable to decode into appConf, %v", err))
 	}
+	AppConf.StorageConf.Path = AppConf.BasePath + util.GetPathTag() + AppConf.StorageConf.Dir + util.GetPathTag()
 	logrus.Infof("init success: conf = %+v", AppConf)
 
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",

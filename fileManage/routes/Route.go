@@ -12,7 +12,7 @@ var (
 
 func init() {
 	Routes = gin.Default()
-	Routes.Static("/public", config.AppConf.BasePath)
+	Routes.Static("/public", config.AppConf.StorageConf.Path)
 	Routes.POST("/api/login", controller.Login)
 	Routes.POST("/api/media/upload", controller.Upload)
 	Routes.POST("/api/media/upload/multiple", controller.UploadMultiple)
