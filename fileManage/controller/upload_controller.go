@@ -5,11 +5,14 @@ import (
 	"Img/databases"
 	"Img/model"
 	"Img/services"
+	"Img/util"
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
+	"path/filepath"
+	"time"
 )
 
 func Upload(c *gin.Context) {
@@ -30,10 +33,13 @@ func Upload(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	fileName := file.Filename
+	fileNameExt := filepath.Ext(file.Filename)
 	md5String := hex.EncodeToString(hash.Sum(nil))
+	filePathName := time.Now().Format("2006-01-02") + util.GetPathTag() + md5String + fileNameExt
 	media := model.NewMedia()
 	media.Md5 = md5String
+	media.Size = file.Size
+	media.Type = file.Header.Get("Content-Type")
 	err = databases.GetMediaByMd5(media)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -44,11 +50,10 @@ func Upload(c *gin.Context) {
 		c.JSON(http.StatusOK, resp)
 		return
 	}
-
-	media.Name = fileName
-	path := config.AppConf.StorageConf.Path + fileName
-	media.Path = path
-	err = c.SaveUploadedFile(file, path)
+	media.Name = file.Filename
+	storagePath := config.AppConf.StorageConf.Path + filePathName
+	media.Path = filePathName
+	err = c.SaveUploadedFile(file, storagePath)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -82,8 +87,7 @@ func UploadMultiple(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-
-		fileName := file.Filename
+		fileName := time.Now().Format("2006-01-02") + util.GetPathTag() + file.Filename
 		path := config.AppConf.StorageConf.Path + fileName
 		md5String := hex.EncodeToString(hash.Sum(nil))
 		media := model.NewMedia()
