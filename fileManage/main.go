@@ -18,6 +18,7 @@ import (
 	"time"
 	//"gorm.io/driver/sqlite"
 	//"gorm.io/gorm"
+	_ "github.com/graphql-go/graphql"
 	"io"
 	"os"
 	"path"

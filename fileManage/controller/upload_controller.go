@@ -35,7 +35,8 @@ func Upload(c *gin.Context) {
 	}
 	fileNameExt := filepath.Ext(file.Filename)
 	md5String := hex.EncodeToString(hash.Sum(nil))
-	filePathName := time.Now().Format("2006-01-02") + util.GetPathTag() + md5String + fileNameExt
+	//filePathName := time.Now().Format("2006-01-02") + util.GetPathTag() + md5String + fileNameExt
+	filePathName := util.GetPathTag() + md5String + fileNameExt
 	media := model.NewMedia()
 	media.Md5 = md5String
 	media.Size = file.Size
