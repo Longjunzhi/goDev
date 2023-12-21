@@ -9,17 +9,13 @@ import (
 
 func AuthMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if token, ok := c.Get("Authorization"); ok {
-			fmt.Println("Authorization", token)
-		}
-		fmt.Println("Header Authorization", c.GetHeader("Authorization"))
-		if token, ok := c.Get(constants.HEADER_KEY_BEAR_TOKEN); ok {
-			if token != constants.TEMP_TOKEN {
+		if c.Request.Method == "POST" {
+			fmt.Println("c.GetHeader(constants.HEADER_KEY_BEAR_TOKEN)", c.GetHeader(constants.HEADER_KEY_BEAR_TOKEN))
+			fmt.Println("c.Request.Header.Get(constants.HEADER_KEY_BEAR_TOKEN)", c.Request.Header.Get(constants.HEADER_KEY_BEAR_TOKEN))
+			if c.GetHeader(constants.HEADER_KEY_BEAR_TOKEN) != constants.TEMP_TOKEN {
 				c.JSON(http.StatusUnauthorized, "未授权")
 				return
 			}
-		} else {
-			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 		c.Next()
 	}

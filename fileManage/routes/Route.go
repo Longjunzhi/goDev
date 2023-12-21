@@ -13,11 +13,10 @@ var (
 
 func init() {
 	Routes = gin.Default()
-	Routes.Use(middlewares.AuthMiddleWare())
-	Routes.Use(middlewares.Cors())
-	Routes.Static("/public", config.AppConf.StorageConf.Path)
-	Routes.POST("/api/login", controller.Login)
-	Routes.POST("/api/media/upload", controller.Upload)
-	Routes.POST("/api/media/upload/multiple", controller.UploadMultiple)
-	Routes.POST("/api/media/get", controller.MediaGet)
+	r := Routes.Use(middlewares.AuthMiddleWare(), middlewares.Cors())
+	r.Static("/public", config.AppConf.StorageConf.Path)
+	r.POST("/api/login", controller.Login)
+	r.POST("/api/media/upload", controller.Upload)
+	r.POST("/api/media/upload/multiple", controller.UploadMultiple)
+	r.POST("/api/media/get", controller.MediaGet)
 }
