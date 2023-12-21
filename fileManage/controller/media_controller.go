@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"Img/constants"
 	"Img/services"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,7 @@ func MediaGet(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	media, code, err := services.MediaGet(ctx, req)
+	mediaGetRes, code, err := services.MediaGet(ctx, req)
 	if code != http.StatusOK {
 		if err != nil {
 			c.JSON(code, err.Error())
@@ -25,6 +26,9 @@ func MediaGet(c *gin.Context) {
 		c.JSON(code, errors.New("no err message"))
 		return
 	}
-	resp.Data = media
+	for i, m := range mediaGetRes.Media {
+		mediaGetRes.Media[i].Path = constants.APP_STORAGE_URL + m.Path
+	}
+	resp.Data = mediaGetRes
 	c.JSON(http.StatusOK, resp)
 }
