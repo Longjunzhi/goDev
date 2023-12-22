@@ -36,7 +36,7 @@ func Upload(c *gin.Context) {
 	fileNameExt := filepath.Ext(file.Filename)
 	md5String := hex.EncodeToString(hash.Sum(nil))
 	//filePathName := time.Now().Format("2006-01-02") + util.GetPathTag() + md5String + fileNameExt
-	filePathName := util.GetPathTag() + md5String + fileNameExt
+	filePathName := md5String + fileNameExt
 	media := model.NewMedia()
 	media.Md5 = md5String
 	media.Size = file.Size
@@ -52,7 +52,7 @@ func Upload(c *gin.Context) {
 		return
 	}
 	media.Name = file.Filename
-	storagePath := config.AppConf.StorageConf.Path + filePathName
+	storagePath := config.AppConf.StorageConf.Path + util.GetPathTag() + filePathName
 	media.Path = filePathName
 	err = c.SaveUploadedFile(file, storagePath)
 	if err != nil {
@@ -64,7 +64,8 @@ func Upload(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, media)
+	resp.Data = media
+	c.JSON(http.StatusOK, resp)
 }
 
 func UploadMultiple(c *gin.Context) {
