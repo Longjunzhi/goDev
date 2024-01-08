@@ -11,6 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.17.0
+	github.com/streadway/amqp v1.1.0
 	gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55
 )
 

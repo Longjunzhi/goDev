@@ -20,6 +20,7 @@ import (
 	//"gorm.io/gorm"
 	_ "github.com/graphql-go/graphql"
 	"io"
+	_ "net/http/pprof"
 	"os"
 	"path"
 	"strings"
@@ -32,6 +33,9 @@ func main() {
 			fmt.Printf("系统捕获错误：%+v", err)
 		}
 		fmt.Printf("结束")
+	}()
+	go func() {
+		log.Println(http.ListenAndServe(":6060", nil))
 	}()
 	err := godotenv.Load(".env")
 	if err != nil {
