@@ -3,3 +3,5 @@ config/config.prod.yml
 *.exe
 .env
 storge
+vendor
+go.sum
