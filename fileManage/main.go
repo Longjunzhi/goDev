@@ -3,6 +3,7 @@ package main
 import (
 	"Img/config"
 	_ "Img/config"
+	"Img/jobs"
 	"Img/routes"
 	"context"
 	"crypto/md5"
@@ -42,7 +43,7 @@ func main() {
 		log.Fatalf("Some error occured. Err: %s", err)
 	}
 	runServer()
-
+	jobs.NewConsumeSimpleUploadOssJob()
 	//pathName := "D:\\个人\\所有照片\\"
 	//descPath := "D:\\个人\\data\\"
 	//db, err := gorm.Open(sqlite.Open(descPath+"test.db"), &gorm.Config{})

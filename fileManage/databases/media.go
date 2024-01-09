@@ -34,6 +34,13 @@ func MediaGetByOffset(ctx context.Context, offset, count int) (media []model.Med
 	}
 	return media, count, nil
 }
+func GetMediaById(id uint) (media *model.Media, err error) {
+	err = Db.Debug().Unscoped().Where("id = ?", id).First(media).Error
+	if IsErrorRecordNotFound(err) {
+		return media, nil
+	}
+	return nil, err
+}
 
 type MediaCount struct {
 	Total int64 `json:"total"`

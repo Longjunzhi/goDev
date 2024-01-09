@@ -3,6 +3,7 @@ package controller
 import (
 	"Img/config"
 	"Img/databases"
+	"Img/jobs"
 	"Img/model"
 	"Img/services"
 	"Img/util"
@@ -65,6 +66,7 @@ func Upload(c *gin.Context) {
 		return
 	}
 	resp.Data = media
+	jobs.NewPublishUploadOssJob(*&jobs.UploadOssJobMessage{MediaId: media.ID})
 	c.JSON(http.StatusOK, resp)
 }
 

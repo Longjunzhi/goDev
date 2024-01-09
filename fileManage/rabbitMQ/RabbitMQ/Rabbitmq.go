@@ -13,7 +13,7 @@ const MQURL = "amqp://test:test@47.99.114.12:5672/test"
 // rabbitMQ结构体
 type RabbitMQ struct {
 	conn    *amqp.Connection
-	channel *amqp.Channel
+	Channel *amqp.Channel
 	//队列名称
 	QueueName string
 	//交换机名称
@@ -31,7 +31,7 @@ func NewRabbitMQ(queueName string, exchange string, key string) *RabbitMQ {
 
 // 断开channel 和 connection
 func (r *RabbitMQ) Destory() {
-	r.channel.Close()
+	r.Channel.Close()
 	r.conn.Close()
 }
 
@@ -53,7 +53,7 @@ func NewRabbitMQSimple(queueName string) *RabbitMQ {
 	rabbitmq.failOnErr(err, "failed to connect rabb"+
 		"itmq!")
 	//获取channel
-	rabbitmq.channel, err = rabbitmq.conn.Channel()
+	rabbitmq.Channel, err = rabbitmq.conn.Channel()
 	rabbitmq.failOnErr(err, "failed to open a channel")
 	return rabbitmq
 }
@@ -61,7 +61,7 @@ func NewRabbitMQSimple(queueName string) *RabbitMQ {
 // 直接模式队列生产
 func (r *RabbitMQ) PublishSimple(message string) {
 	//1.申请队列，如果队列不存在会自动创建，存在则跳过创建
-	_, err := r.channel.QueueDeclare(
+	_, err := r.Channel.QueueDeclare(
 		r.QueueName,
 		//是否持久化
 		false,
@@ -78,7 +78,7 @@ func (r *RabbitMQ) PublishSimple(message string) {
 		fmt.Println(err)
 	}
 	//调用channel 发送消息到队列中
-	r.channel.Publish(
+	r.Channel.Publish(
 		r.Exchange,
 		r.QueueName,
 		//如果为true，根据自身exchange类型和routekey规则无法找到符合条件的队列会把消息返还给发送者
@@ -94,7 +94,7 @@ func (r *RabbitMQ) PublishSimple(message string) {
 // simple 模式下消费者
 func (r *RabbitMQ) ConsumeSimple() {
 	//1.申请队列，如果队列不存在会自动创建，存在则跳过创建
-	q, err := r.channel.QueueDeclare(
+	q, err := r.Channel.QueueDeclare(
 		r.QueueName,
 		//是否持久化
 		false,
@@ -112,7 +112,7 @@ func (r *RabbitMQ) ConsumeSimple() {
 	}
 
 	//接收消息
-	msgs, err := r.channel.Consume(
+	msgs, err := r.Channel.Consume(
 		q.Name, // queue
 		//用来区分多个消费者
 		"", // consumer
