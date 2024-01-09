@@ -5,8 +5,10 @@ import (
 	"Img/util"
 	"errors"
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -41,6 +43,10 @@ type AppConfiguration struct {
 var AppConf AppConfiguration
 
 func init() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Some error occured. Err: %s", err)
+	}
 	env := os.Getenv("ENV")
 	AppConf.ENV = env
 	setBasePath()
@@ -50,7 +56,7 @@ func init() {
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("error reading config, %s", err))
 	}
-	err := viper.Unmarshal(&AppConf)
+	err = viper.Unmarshal(&AppConf)
 	if err != nil {
 		panic(fmt.Errorf("unable to decode into appConf, %v", err))
 	}

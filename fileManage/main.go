@@ -2,7 +2,6 @@ package main
 
 import (
 	"Img/config"
-	_ "Img/config"
 	"Img/jobs"
 	"Img/routes"
 	"context"
@@ -10,7 +9,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"log"
 	"net/http"
@@ -38,10 +36,6 @@ func main() {
 	go func() {
 		log.Println(http.ListenAndServe(":6060", nil))
 	}()
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Some error occured. Err: %s", err)
-	}
 	runServer()
 	jobs.NewConsumeSimpleUploadOssJob()
 	//pathName := "D:\\个人\\所有照片\\"
