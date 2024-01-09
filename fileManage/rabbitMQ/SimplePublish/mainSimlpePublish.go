@@ -8,6 +8,6 @@ import (
 func main() {
 	rabbitmq := RabbitMQ.NewRabbitMQSimple("" +
 		"kuteng")
-	rabbitmq.PublishSimple("Hello kuteng222!")
+	rabbitmq.PublishSimple("Hello kuteng111!")
 	fmt.Println("发送成功！")
 }

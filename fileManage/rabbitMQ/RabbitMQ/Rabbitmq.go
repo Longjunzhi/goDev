@@ -7,7 +7,7 @@ import (
 )
 
 // 连接信息amqp://kuteng:kuteng@127.0.0.1:5672/kuteng这个信息是固定不变的amqp://事固定参数后面两个是用户名密码ip地址端口号Virtual Host
-const MQURL = "amqp://01db05f1:admin@rabbitmqApi.mini.pangxuejun.cn:80"
+const MQURL = "amqp://test:test@47.99.114.12:5672/test"
 
 // admin  01db05f1
 // rabbitMQ结构体
