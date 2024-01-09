@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Img/rabbitMQ/RabbitMQ"
+	"fileManage/rabbitMQ/RabbitMQ"
 )
 
 func main() {

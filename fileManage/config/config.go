@@ -1,9 +1,9 @@
 package config
 
 import (
-	"Img/databases"
-	"Img/util"
 	"errors"
+	"fileManage/databases"
+	"fileManage/util"
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"

@@ -1,12 +1,12 @@
 package jobs
 
 import (
-	"Img/config"
-	"Img/databases"
-	"Img/rabbitMQ/RabbitMQ"
-	"Img/services"
-	"Img/util"
 	"encoding/json"
+	"fileManage/config"
+	"fileManage/databases"
+	"fileManage/rabbitMQ/RabbitMQ"
+	"fileManage/services"
+	"fileManage/util"
 	"fmt"
 	"log"
 	"path/filepath"

@@ -1,14 +1,14 @@
 package controller
 
 import (
-	"Img/config"
-	"Img/databases"
-	"Img/jobs"
-	"Img/model"
-	"Img/services"
-	"Img/util"
 	"crypto/md5"
 	"encoding/hex"
+	"fileManage/config"
+	"fileManage/databases"
+	"fileManage/jobs"
+	"fileManage/model"
+	"fileManage/services"
+	"fileManage/util"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"

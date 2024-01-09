@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"Img/config"
-	"Img/controller"
-	"Img/middlewares"
+	"fileManage/config"
+	"fileManage/controller"
+	"fileManage/middlewares"
 	"github.com/gin-gonic/gin"
 )
 

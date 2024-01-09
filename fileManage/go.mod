@@ -1,4 +1,4 @@
-module Img
+module fileManage
 
 go 1.19
 

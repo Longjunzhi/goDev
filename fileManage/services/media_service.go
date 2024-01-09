@@ -1,9 +1,9 @@
 package services
 
 import (
-	"Img/databases"
-	"Img/model"
 	"context"
+	"fileManage/databases"
+	"fileManage/model"
 	"mime/multipart"
 	"net/http"
 )

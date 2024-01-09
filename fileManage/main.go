@@ -1,13 +1,13 @@
 package main
 
 import (
-	"Img/config"
-	"Img/jobs"
-	"Img/routes"
 	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
+	"fileManage/config"
+	"fileManage/jobs"
+	"fileManage/routes"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"log"

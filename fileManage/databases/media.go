@@ -1,8 +1,8 @@
 package databases
 
 import (
-	"Img/model"
 	"context"
+	"fileManage/model"
 )
 
 func CreateMedia(media *model.Media) (err error) {

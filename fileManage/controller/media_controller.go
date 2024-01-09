@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"Img/constants"
-	"Img/services"
 	"errors"
+	"fileManage/constants"
+	"fileManage/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"Img/constants"
+	"fileManage/constants"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
