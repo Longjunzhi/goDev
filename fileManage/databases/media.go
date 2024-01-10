@@ -10,6 +10,11 @@ func CreateMedia(media *model.Media) (err error) {
 	return err
 }
 
+func UpdateMediaByMedia(media *model.Media) (err error) {
+	err = Db.Debug().Unscoped().Table(media.TableName()).Where(model.Media{ID: media.ID}).Update(media).Error
+	return err
+}
+
 func GetMediaByMd5(media *model.Media) (err error) {
 	err = Db.Debug().Unscoped().Where(model.Media{Md5: media.Md5}).First(media).Error
 	if IsErrorRecordNotFound(err) {
@@ -21,9 +26,9 @@ func GetMediaByMd5(media *model.Media) (err error) {
 func GetMediaByMd5s(md5 string) (media *model.Media, err error) {
 	err = Db.Debug().Unscoped().Where(model.Media{Md5: md5}).First(media).Error
 	if IsErrorRecordNotFound(err) {
-		return media, nil
+		return nil, nil
 	}
-	return nil, err
+	return media, err
 }
 
 func MediaGetByOffset(ctx context.Context, offset, count int) (media []model.Media, page int, err error) {
@@ -35,11 +40,12 @@ func MediaGetByOffset(ctx context.Context, offset, count int) (media []model.Med
 	return media, count, nil
 }
 func GetMediaById(id uint) (media *model.Media, err error) {
-	err = Db.Debug().Unscoped().Where("id = ?", id).First(media).Error
+	media = &model.Media{}
+	err = Db.Debug().Unscoped().Where("id = ?", id).First(&media).Error
 	if IsErrorRecordNotFound(err) {
-		return media, nil
+		return nil, nil
 	}
-	return nil, err
+	return media, err
 }
 
 type MediaCount struct {

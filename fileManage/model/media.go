@@ -3,6 +3,7 @@ package model
 const MediaTableName = "media"
 
 type Media struct {
+	ID      uint   `json:"id"`
 	Name    string `json:"name"`
 	Size    int64  `json:"size"`
 	Md5     string `json:"md_5"`

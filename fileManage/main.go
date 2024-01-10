@@ -36,8 +36,10 @@ func main() {
 	go func() {
 		log.Println(http.ListenAndServe(":6060", nil))
 	}()
+	go func() {
+		jobs.NewConsumeSimpleUploadOssJob()
+	}()
 	runServer()
-	jobs.NewConsumeSimpleUploadOssJob()
 	//pathName := "D:\\个人\\所有照片\\"
 	//descPath := "D:\\个人\\data\\"
 	//db, err := gorm.Open(sqlite.Open(descPath+"test.db"), &gorm.Config{})

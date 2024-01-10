@@ -6,11 +6,12 @@ import (
 	"os"
 )
 
-func OssUpload(localFileName string, fileName string) {
+func OssUpload(localFileName string, fileName string) (OssFileName string, err error) {
 	endpoint := os.Getenv("OSS_END_POINT")
 	accessKeyID := os.Getenv("OSS_ACCESS_KEY_ID")
 	accessKeySecret := os.Getenv("OSS_ACCESS_KEY_SECRET")
 	ossBucket := os.Getenv("OSS_BUCKET")
+	OssFileName = ""
 
 	// yourBucketName填写存储空间名称。
 	// yourObjectName填写Object完整路径，完整路径不包含Bucket名称。
@@ -19,6 +20,7 @@ func OssUpload(localFileName string, fileName string) {
 	if err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(-1)
+		return OssFileName, err
 	}
 
 	// 创建OSSClient实例。
@@ -27,16 +29,21 @@ func OssUpload(localFileName string, fileName string) {
 	if err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(-1)
+		return OssFileName, err
 	}
 
 	// 获取存储空间。
 	bucket, err := client.Bucket(ossBucket)
 	if err != nil {
 		fmt.Println(err)
+		return OssFileName, err
 	}
 	// 上传文件。
 	err = bucket.PutObjectFromFile(fileName, localFileName)
 	if err != nil {
 		fmt.Println(err)
+		return OssFileName, err
 	}
+	OssFileName = endpoint + "/" + fileName
+	return OssFileName, nil
 }

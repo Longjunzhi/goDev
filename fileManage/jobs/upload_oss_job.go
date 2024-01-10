@@ -75,12 +75,20 @@ func NewConsumeSimpleUploadOssJob() {
 			if err != nil {
 				return
 			}
-			if uploadOssJobMessage.MediaId > 0 {
+			if uploadOssJobMessage != nil && uploadOssJobMessage.MediaId > 0 {
 				media, err2 := databases.GetMediaById(uploadOssJobMessage.MediaId)
 				if err2 != nil {
 					return
 				}
-				services.OssUpload(config.AppConf.StorageConf.Path+util.GetPathTag()+media.Path, media.Md5+filepath.Ext(media.Name))
+				ossFileName, err := services.OssUpload(config.AppConf.StorageConf.Path+util.GetPathTag()+media.Path, media.Md5+filepath.Ext(media.Name))
+				if err != nil {
+					return
+				}
+				media.OssPath = ossFileName
+				err = databases.UpdateMediaByMedia(media)
+				if err != nil {
+					return
+				}
 			}
 		}
 	}()
