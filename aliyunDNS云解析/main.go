@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 /*
@@ -47,6 +48,7 @@ func main() {
 	}
 	for _, host := range hosts {
 		err := UpdateIp(host[:strings.Index(host, ".")], "AAAA", ip2409IPv6s, host)
+		time.Sleep(time.Duration(60) * time.Second)
 		if err != nil {
 			continue
 		}
