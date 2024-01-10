@@ -5,3 +5,4 @@ config/config.prod.yml
 storge
 vendor
 go.sum
+fileManage
