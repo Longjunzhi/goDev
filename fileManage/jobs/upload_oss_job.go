@@ -80,6 +80,9 @@ func NewConsumeSimpleUploadOssJob() {
 				if err2 != nil {
 					return
 				}
+				if media.OssPath != "" {
+					return
+				}
 				ossFileName, err := services.OssUpload(config.AppConf.StorageConf.Path+util.GetPathTag()+media.Path, media.Md5+filepath.Ext(media.Name))
 				if err != nil {
 					return

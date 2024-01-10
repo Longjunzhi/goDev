@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"os"
+	"time"
 )
 
 func OssUpload(localFileName string, fileName string) (OssFileName string, err error) {
@@ -39,11 +40,12 @@ func OssUpload(localFileName string, fileName string) (OssFileName string, err e
 		return OssFileName, err
 	}
 	// 上传文件。
+	fileName = time.Now().Format("2006-01-02") + "/" + fileName
 	err = bucket.PutObjectFromFile(fileName, localFileName)
 	if err != nil {
 		fmt.Println(err)
 		return OssFileName, err
 	}
-	OssFileName = endpoint + "/" + fileName
+	OssFileName = endpoint[:8] + ossBucket + "." + endpoint[8:] + "/" + fileName
 	return OssFileName, nil
 }
