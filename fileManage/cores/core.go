@@ -1,0 +1,5 @@
+package cores
+
+func InitCore() {
+
+}
