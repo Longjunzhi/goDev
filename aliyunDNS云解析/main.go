@@ -60,7 +60,7 @@ func main() {
 		fmt.Printf("Invalid domain: %s\n", host)
 		return
 	}
-	subDomain := strings.Join(parts[:2], ".")
+	subDomain := strings.Join(parts[:len(parts)-2], ".")
 	fmt.Println("subDomain: %s, ipType: %s, ip: %s, host: %s", subDomain, ipType, []string{ip}, host)
 	err := UpdateIp(subDomain, ipType, ip, host)
 	if err != nil {
